@@ -444,11 +444,11 @@ def keyboard (key, posX, posY):
         RotatAnguloX += 1.0
     elif(key == b'x'):
             RotatAnguloX -= 1.0
-    elif(key == b'Y'):
+    elif(key == b'C'):
             RotatAnguloY += 1.0
     elif(key == b'c'):
             RotatAnguloY -= 1.0
-    elif(key == b'C'):
+    elif(key == b'Z'):
             RotatAnguloZ += 1.0
     elif(key == b'z'):
             RotatAnguloZ -= 1.0 
