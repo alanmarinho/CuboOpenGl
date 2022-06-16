@@ -13,9 +13,9 @@ CamY = 4.0
 CamZ = 3.0
 
 #Ângulos de rotação usados para rotacionar o cubo como um todo
-RotatAnguloX = 0.0
-RotatAnguloY = 0.0
-RotatAnguloZ = 0.0
+RotatAnguloX = 0.00
+RotatAnguloY = 0.00
+RotatAnguloZ = 0.00
 
 #Ângulo de giro da faces. (radianos)
 GIRO = 90/180*math.pi
@@ -422,10 +422,10 @@ class cubos():
             glVertex3d(Cubos[7][i][0], Cubos[7][i][1], Cubos[7][i][2])
         glEnd()
 
-#Função que realiza a rotação dos cubos presentes na face expecificada
-def rotaciona(lista, face):
+#Função que realiza a rotação dos cubos presentes na face pela martriz expecificada (M).
+def rotaciona(lista, M):
     for i in lista:
-            Cubos[i] = np.round(np.dot(Cubos[i], face))
+            Cubos[i] = np.round(np.dot(Cubos[i], M))
 
 #Função que identifica quais os cubos estão presentes na face expecificada
 def localiza(ponto, face):
