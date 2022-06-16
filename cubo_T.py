@@ -1,19 +1,26 @@
+# -*- coding: utf-8 -*-
+
 from OpenGL.GL import *
 from OpenGL.GLUT import *
 from OpenGL.GLU import *
 import math
 import numpy as np
 
+#Parâmetros para a configuração da câmera
 aspecto = 1.0
 CamX = 4.0
 CamY = 4.0
 CamZ = 3.0
+
+#Ângulos de rotação usados para rotacionar o cubo como um todo
 RotatAnguloX = 0.0
 RotatAnguloY = 0.0
 RotatAnguloZ = 0.0
 
+#Ângulo de giro da faces. (radianos)
 GIRO = 90/180*math.pi
 
+#Matrizes de rotação.  h = sentido horário a = sentido anti-horário
 MRZ_h = [math.cos(GIRO), -math.sin(GIRO), 0], [math.sin(GIRO), math.cos(GIRO), 0], [0,0,1]
 MRZ_a = [math.cos(-GIRO), -math.sin(-GIRO), 0], [math.sin(-GIRO), math.cos(-GIRO), 0], [0,0,1]
 MRX_h = [1,0,0],[0, math.cos(GIRO), -math.sin(GIRO)], [0, math.sin(GIRO), math.cos(GIRO)]
@@ -21,6 +28,7 @@ MRX_a = [1,0,0],[0, math.cos(-GIRO), -math.sin(-GIRO)], [0, math.sin(-GIRO), mat
 MRY_h = [math.cos(GIRO), 0, -math.sin(GIRO)], [0,1,0], [math.sin(GIRO), 0, math.cos(GIRO)]
 MRY_a = [math.cos(-GIRO), 0, -math.sin(-GIRO)], [0,1,0], [math.sin(-GIRO), 0, math.cos(-GIRO)]
 
+#Coordenadas das faces de todos os cubos que compõem o cubo maior
 cubos =  [[1,1,-1],[0,1,-1],[0,0,-1],[1,0,-1],\
          [1,1,-1],[1,1,0], [0,1,0], [0,1,-1],\
          [1,1,0], [1,0,0], [1,0,-1],[1,1,-1],\
@@ -69,16 +77,22 @@ cubos =  [[1,1,-1],[0,1,-1],[0,0,-1],[1,0,-1],\
          [1,-1,0],[0,-1,0],[0,0,0],[1,0,0], \
          [0,0,0],[0,0,1],[1,0,1],[1,0,0], \
          [0,-1,0],[0,-1,1],[0,0,1],[0,0,0]]
+
+#traforma todas as coordenadas dos cubos em array para poder proporcionar alguns tipos de cálculos
 Cubos = np.array(cubos)
 
+#Coodenadas dos pontos de amostragem das faces
 Faces = [[1,1,1], [-1,1,1], [-1,-1,1], [1,-1,1]], \
         [ [1,1,-1], [-1,1,-1], [-1,-1,-1], [1,-1,-1]],\
         [[1,1,-1], [1,-1,-1], [1,1,1], [1,-1,1]],\
         [[-1,1,-1], [-1,-1,-1], [-1,1,1], [-1,-1,1]],\
         [[1,1,-1], [-1,1,-1], [1,1,1], [-1,1,1]],\
         [[-1,-1,-1], [1,-1,-1], [-1,-1,1], [1,-1,1]]
+
+#traformar todas as coordenadas das amostragens das faces em array para poder proporcionar alguns tipos de cálculos
 faces = np.array(Faces)
 
+#gera as linhas do plano (x,y,z)
 def gera_plano():
     glBegin (GL_LINES)
     #eixo X
@@ -97,6 +111,8 @@ def gera_plano():
     glColor3f (0.0,  0.0, 1.0)
     glVertex3f(0.0,  0.0, 20.0)
     glEnd ()
+
+#gera o cubo na tela após os redesenhos
 def gera_cubo():
     
     glPushMatrix()
@@ -130,7 +146,8 @@ def gera_cubo():
     glPushMatrix()
     cubos.cubo8()
     glPopMatrix()  
-    
+   
+#desenha as cada uma das faces dos cubos na tela
 class cubos(): 
     def cubo1():
         glBegin(GL_POLYGON)
@@ -405,10 +422,12 @@ class cubos():
             glVertex3d(Cubos[7][i][0], Cubos[7][i][1], Cubos[7][i][2])
         glEnd()
 
-def rotaciona(lista, F):
+#Função que realiza a rotação dos cubos presentes na face expecificada
+def rotaciona(lista, face):
     for i in lista:
-            Cubos[i] = np.round(np.dot(Cubos[i], F))
+            Cubos[i] = np.round(np.dot(Cubos[i], face))
 
+#Função que identifica quais os cubos estão presentes na face expecificada
 def localiza(ponto, face):
     teste = 0
     for i in range(0,3):
@@ -416,7 +435,8 @@ def localiza(ponto, face):
             teste += 1
     if(teste == 3):
         return True
-    
+ 
+#Função que cuida das operações com o teclado   
 def keyboard (key, posX, posY):
     global RotatAnguloX, RotatAnguloY, RotatAnguloZ
     
@@ -499,6 +519,7 @@ def keyboard (key, posX, posY):
     print("Tecla Pressionada:", key1[2])
     glutPostRedisplay()
 
+#Função que gerencia o desenho e aplica as rotações do objeto inteiro
 def draw ():
     glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
     confCamera()
@@ -510,7 +531,8 @@ def draw ():
     gera_plano()
     gera_cubo()
     glFlush ()
-  
+
+#Função que gerencia as configrações da câmera
 def confCamera ():
     glMatrixMode (GL_PROJECTION)
     glLoadIdentity ()
@@ -519,10 +541,11 @@ def confCamera ():
     glLoadIdentity ()
     gluLookAt (CamX,CamY,CamZ, 0,0,0, 0,0,1)
   
+#Função principal
 def main():
     glutInit()
-    glutCreateWindow('Alan Marinho')
-    glutInitWindowSize(1000, 1000)
+    glutCreateWindow('Equipe Cubo Magico')
+    glutReshapeWindow(900, 900)
     glClearColor (0.0, 0.0, 0.0, 1.0)
     glEnable(GL_DEPTH_TEST)
     glLoadIdentity()
