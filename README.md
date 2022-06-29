@@ -1,7 +1,7 @@
 # "Cubo Mágico" em OpenGl Python
 ## Objetivo do reposotório
 
-&emsp;  O objetivo desse ropositório é servir de apoio para o seminário da disciplina de Computação Grafica.
+&emsp;  O objetivo desse repositório é servir de apoio para o seminário da disciplina de Computação Grafica.
 
 &emsp;  Nele ficará guardado o material gerado pela equipe 2, que ficou com o tema: Interação com o “Cubo Mágico”.
 
